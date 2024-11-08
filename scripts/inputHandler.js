@@ -6,19 +6,19 @@ function inputHandler(){
         switch (keyPressed) {
             case 'KeyF':
                 // console.log(keyPressed,'1');
-                detectHit(hitAreaFirst, tileFirst);
+                newDetect(testArray, hitAreaFirst);
                 break;
             case 'KeyG':
                 // console.log(keyPressed, '2');
-                detectHit(hitAreaSecond, tileSecond);
+                newDetect(testArray, hitAreaSecond);
                 break;
             case 'KeyH':
                 // console.log(keyPressed, '3');
-                detectHit(hitAreaThird, tileThird);
+                newDetect(testArray, hitAreaThird);
                 break;
             case 'KeyJ':
                 // console.log(keyPressed, '4');
-                detectHit(hitAreaFourth, tileFourth);
+                newDetect(testArray, hitAreaFourth);
                 break;
             default:
                 // console.log(keyPressed)

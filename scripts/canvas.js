@@ -29,6 +29,7 @@ canvas.width = window_width / 2;
 
 // TODO: Реализовать функцию перемещения для пробы
 // Затем перейти к реализации ритм игры
+
 class Tile {
     constructor(xpos, ypos, width, height, speed){
         this.xpos = xpos,
@@ -50,26 +51,19 @@ class Tile {
             this.ypos += speed;
             this.checkColision(this.ypos, ctx);
         }
-        // console.log(this.ypos);
     }
 
     checkColision(ypos, context){
-        // console.log('colision', ypos);
         if (ypos >= canvas.height){
-            // console.log('colision!!!!!');
             context.clearRect(this.xpos, this.ypos, this.width, this.height);
             this.status = 0;
         }
     }
 
-    succesfullHit(timing){
-
+    disappear(){
+        context.clearRect(this.xpos, this.ypos, this.width, this.height);
+        this.status === 0;
     }
-
-    failedHit(timing){
-
-    }
-
 }
 
 class HitArea {
@@ -86,86 +80,107 @@ class HitArea {
     }
 }
 
-let hitAreaFirst = new HitArea((canvas.width / 2) - 100, canvas.height - 80, 50, 80);
-let hitAreaSecond = new HitArea((canvas.width / 2) - 45, canvas.height - 80, 50, 80);
-let hitAreaThird = new HitArea((canvas.width / 2) + 10, canvas.height - 80, 50, 80);
-let hitAreaFourth = new HitArea((canvas.width / 2) + 65, canvas.height - 80, 50, 80);
+const TILE_HEIGHT = 80;
+const TILE_WIDTH = 50;
+
+const LINE_ONE = 100;
+const LINE_TWO = 45;
+const LINE_THREE = 10;
+const LINE_FOUR = 65;
+
+const MOVE_SPEED = 1;
+
+const AUDIO_POP = new Audio('../sounds/drum-hitclap.ogg');
+
+let hitAreaFirst = new HitArea((canvas.width / 2) - LINE_ONE, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
+let hitAreaSecond = new HitArea((canvas.width / 2) - LINE_TWO, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
+let hitAreaThird = new HitArea((canvas.width / 2) + LINE_THREE, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
+let hitAreaFourth = new HitArea((canvas.width / 2) + LINE_FOUR, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
 
 
-let tileFirst = new Tile((canvas.width / 2) - 100, 100, 50, 80);
-let tileSecond = new Tile((canvas.width / 2) - 45, 0, 50, 80);
-let tileThird = new Tile((canvas.width / 2 ) + 10, 200, 50, 80);
-let tileFourth = new Tile((canvas.width / 2) + 65, 0, 50, 80);
+let tileFirst = new Tile((canvas.width / 2) - LINE_ONE, -100, TILE_WIDTH, TILE_HEIGHT);
+let tileSecond = new Tile((canvas.width / 2) - LINE_TWO, -0, TILE_WIDTH, TILE_HEIGHT);
+let tileThird = new Tile((canvas.width / 2 ) + LINE_THREE, -200, TILE_WIDTH, TILE_HEIGHT);
+let tileFourth = new Tile((canvas.width / 2) + LINE_FOUR, -300, TILE_WIDTH, TILE_HEIGHT);
 
-// tileFirst.draw(ctx);
-// tileSecond.draw(ctx);
+let tileX5 = new Tile((canvas.width / 2) - LINE_ONE, -700, TILE_WIDTH, TILE_HEIGHT);
+let tileX6 = new Tile((canvas.width / 2) - LINE_ONE, -450, TILE_WIDTH, TILE_HEIGHT);
+let tileX7 = new Tile((canvas.width / 2) + LINE_THREE, -400, TILE_WIDTH, TILE_HEIGHT);
+let tileX8 = new Tile((canvas.width / 2) + LINE_FOUR, -500, TILE_WIDTH, TILE_HEIGHT);
 
+let testArray = [tileFirst, tileSecond, tileThird, tileFourth, tileX5, tileX6, tileX7, tileX8];
+
+console.log(tileFirst instanceof Tile);
+
+function newDetect(array, hitArea){
+    for (let i = 0; i < array.length; i++){
+        if (hitArea.ypos <= array[i].ypos + array[i].height && hitArea.xpos === array[i].xpos && array[i].status === 1){
+            let tileHitbox = array[i];
+            let hitTiming = Math.floor((tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height)) / 2);
+            AUDIO_POP.play();
+            scoreCounter(hitArea, tileHitbox, hitTiming);
+        }
+    }
+}
 
 function clear(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function detectHit(hitArea, tileHitbox){
-    // console.log(hitArea.ypos);
-    const audioPop = new Audio('../sounds/drum-hitclap.ogg');
-    if (hitArea.ypos <= tileHitbox.ypos + tileHitbox.height && hitArea.xpos === tileHitbox.xpos && tileHitbox.status === 1){
-        
-        // console.log('hit: ', hitArea.ypos, 'hitBottom: ', hitArea.ypos + hitArea.height);
-        // console.log('hitTiming: ',hitTiming);
-        // console.log(hitArea.xpos, tileHitbox.xpos);
-        // console.log(tileHitbox.ypos);
-        // let topHitTiming = tileHitbox.ypos;
-        // let bottomHitTiming = tileHitbox.ypos + tileHitbox.height;
-        // console.log(topHitTiming, bottomHitTiming);
-        // console.log(tileHitbox.ypos, tileHitbox.height);
-        let hitTiming = Math.floor((tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height)) / 2);
-        audioPop.play();
-        // console.log('timing', hitTiming);
-        // console.log('Hit Timing !!!!', hitTiming);
-        scoreCounter(hitArea, tileHitbox, hitTiming);
-    }
+// function detectHit(hitArea, tileHitbox){
+//     const audioPop = new Audio('../sounds/drum-hitclap.ogg');
+//     if (hitArea.ypos <= tileHitbox.ypos + tileHitbox.height && hitArea.xpos === tileHitbox.xpos && tileHitbox.status === 1){
+//         let hitTiming = Math.floor((tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height)) / 2);
+//         audioPop.play();
+//         scoreCounter(hitArea, tileHitbox, hitTiming);
+//     } else {
+//         console.log('miss');
+//         failedHit()
+//     }
+// }
+
+let tileArray = [];
+
+
+function succesfullHit(points){
+    score += (points * total_combo);
+    total_combo += 1;
+    console.log(`points: ${score}pts`);
+    console.log(`combo: ${total_combo}x`);
+}
+
+function failedHit(){
+    total_combo = 1;
+    console.log(`points: ${score}pts`);
+    console.log(`combo: ${total_combo}x`);
 }
 
 function scoreCounter(hitArea, tileHitbox, hitTiming){
-    // let bottomHitArea = tileHitbox.ypos + tileHitbox.height;
     let hitAreaTop = hitArea.ypos - tileHitbox.height;
     let hitAreaBottom = hitArea.ypos + hitArea.height;
-    // console.log(hitAreaTop, hitAreaBottom);
-    // let timingBox = tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height) / 2;
-    // console.log('timingBox', timingBox);
-    // console.log('HitArea T/B', hitAreaTop, hitAreaBottom);
     let okArray = [];
     let niceArray = [];
     let greatArray = [];
-    // console.log('for arguments: ', hitAreaTop, (hitAreaBottom - hitAreaTop));
     for (let o = hitAreaTop; o <= hitAreaBottom; o++){
         okArray.push(o);
     }
-    // console.log('ok:', okArray);
     let middleArrayIndex = Math.floor(okArray.length / 2) + 20;
-    // console.log('middleArrayIndex: ',middleArrayIndex)
     for (let n = okArray[middleArrayIndex] - Math.floor(okArray.length / 6) ;n < okArray[middleArrayIndex] + Math.floor(okArray.length / 6) ;n++){
         niceArray.push(n);
     }
-    // console.log('niceArray: ',niceArray);
     for (let g = okArray[middleArrayIndex] - Math.floor(okArray.length / 16);g < okArray[middleArrayIndex] + Math.floor(okArray.length / 16);g++){
         greatArray.push(g);
     }
-    // console.log('tileHitbox: ', tileHitbox);
-    // console.log('hitArea', hitArea);
-    // console.log('greatArray: ', greatArray);
     if (greatArray.includes(hitTiming)){
         console.log('great');
+        succesfullHit(300);
     } else if (niceArray.includes(hitTiming)){
         console.log('nice');
+        succesfullHit(100);
     } else if (okArray.includes(hitTiming)){
         console.log('ok');
+        succesfullHit(50);
     }
-    // console.log('bottomY: ', bottomHitArea);
-    // if (tileHitbox.ypos + tileHitbox.height){
-
-    // }
-    // console.log(hitArea.ypos, tileHitbox.ypos);
 }
 
 // function newPos(){
@@ -176,16 +191,31 @@ function scoreCounter(hitArea, tileHitbox, hitTiming){
 function update(){
     clear();
 
-    tileFirst.draw(ctx);
-    tileSecond.draw(ctx);
-    tileThird.draw(ctx);
-    tileFourth.draw(ctx);
+    testArray.forEach((obj) => {
+        obj.draw(ctx);
+    })
 
-    tileFirst.move(1);
-    tileSecond.move(1);
-    tileThird.move(1);
-    tileFourth.move(1);
+    // tileFirst.draw(ctx);
+    // tileSecond.draw(ctx);
+    // tileThird.draw(ctx);
+    // tileFourth.draw(ctx);
+    // tileX5.draw(ctx);
+    // tileX6.draw(ctx);
+    // tileX7.draw(ctx);
+    // tileX8.draw(ctx);
 
+    testArray.forEach((obj) => {
+        obj.move(MOVE_SPEED);
+    });
+
+    // tileFirst.move(1);
+    // tileSecond.move(1);
+    // tileThird.move(1);
+    // tileFourth.move(1);
+    // tileX5.move(1);
+    // tileX6.move(1);
+    // tileX7.move(1);
+    // tileX8.move(1);
 
     hitAreaFirst.appear(ctx);
     hitAreaSecond.appear(ctx);
@@ -196,6 +226,14 @@ function update(){
     // detectHit(hitAreaSecond, tileSecond);
     // detectHit(hitAreaThird, tileThird);
     // detectHit(hitAreaFourth, tileFourth);
+
+    // for (let i = 0; i < testArray.length; i++){
+    //     // console.log(testArray[i]);
+    //     if (testArray[testArray.length - 1].status === 0){
+    //         // console.log('done')
+    //         return;
+    //     }
+    // }
 
     requestAnimationFrame(update);
 }
