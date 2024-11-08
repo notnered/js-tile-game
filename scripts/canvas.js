@@ -62,6 +62,14 @@ class Tile {
         }
     }
 
+    succesfullHit(timing){
+
+    }
+
+    failedHit(timing){
+
+    }
+
 }
 
 class HitArea {
@@ -78,16 +86,16 @@ class HitArea {
     }
 }
 
-let hitAreaFirst = new HitArea((canvas.width / 2) - 100, canvas.height - 50, 50, 50);
-let hitAreaSecond = new HitArea((canvas.width / 2) - 45, canvas.height - 50, 50, 50);
-let hitAreaThird = new HitArea((canvas.width / 2) + 10, canvas.height - 50, 50, 50);
-let hitAreaFourth = new HitArea((canvas.width / 2) + 65, canvas.height - 50, 50, 50);
+let hitAreaFirst = new HitArea((canvas.width / 2) - 100, canvas.height - 80, 50, 80);
+let hitAreaSecond = new HitArea((canvas.width / 2) - 45, canvas.height - 80, 50, 80);
+let hitAreaThird = new HitArea((canvas.width / 2) + 10, canvas.height - 80, 50, 80);
+let hitAreaFourth = new HitArea((canvas.width / 2) + 65, canvas.height - 80, 50, 80);
 
 
-let tileFirst = new Tile((canvas.width / 2) - 100, 100, 50, 100);
-let tileSecond = new Tile((canvas.width / 2) - 45, 0, 50, 100);
-let tileThird = new Tile((canvas.width / 2 ) + 10, 200, 50, 100);
-let tileFourth = new Tile((canvas.width / 2) + 65, 0, 50, 100);
+let tileFirst = new Tile((canvas.width / 2) - 100, 100, 50, 80);
+let tileSecond = new Tile((canvas.width / 2) - 45, 0, 50, 80);
+let tileThird = new Tile((canvas.width / 2 ) + 10, 200, 50, 80);
+let tileFourth = new Tile((canvas.width / 2) + 65, 0, 50, 80);
 
 // tileFirst.draw(ctx);
 // tileSecond.draw(ctx);
@@ -99,37 +107,65 @@ function clear(){
 
 function detectHit(hitArea, tileHitbox){
     // console.log(hitArea.ypos);
-    // console.log(tileHitbox.ypos);
+    const audioPop = new Audio('../sounds/drum-hitclap.ogg');
     if (hitArea.ypos <= tileHitbox.ypos + tileHitbox.height && hitArea.xpos === tileHitbox.xpos && tileHitbox.status === 1){
-        console.log('hit', hitArea.ypos, tileHitbox.ypos);
+        
+        // console.log('hit: ', hitArea.ypos, 'hitBottom: ', hitArea.ypos + hitArea.height);
+        // console.log('hitTiming: ',hitTiming);
         // console.log(hitArea.xpos, tileHitbox.xpos);
-        scoreCounter(hitArea, tileHitbox)
+        // console.log(tileHitbox.ypos);
+        // let topHitTiming = tileHitbox.ypos;
+        // let bottomHitTiming = tileHitbox.ypos + tileHitbox.height;
+        // console.log(topHitTiming, bottomHitTiming);
+        // console.log(tileHitbox.ypos, tileHitbox.height);
+        let hitTiming = Math.floor((tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height)) / 2);
+        audioPop.play();
+        // console.log('timing', hitTiming);
+        // console.log('Hit Timing !!!!', hitTiming);
+        scoreCounter(hitArea, tileHitbox, hitTiming);
     }
 }
 
-function scoreCounter(hitArea, tileHitbox){
+function scoreCounter(hitArea, tileHitbox, hitTiming){
     // let bottomHitArea = tileHitbox.ypos + tileHitbox.height;
-    let hitAreaTop = hitArea.ypos;
+    let hitAreaTop = hitArea.ypos - tileHitbox.height;
     let hitAreaBottom = hitArea.ypos + hitArea.height;
-    console.log('HitArea T/B', hitAreaTop, hitAreaBottom);
+    // console.log(hitAreaTop, hitAreaBottom);
+    // let timingBox = tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height) / 2;
+    // console.log('timingBox', timingBox);
+    // console.log('HitArea T/B', hitAreaTop, hitAreaBottom);
     let okArray = [];
     let niceArray = [];
     let greatArray = [];
-    console.log('for arguments: ', hitAreaTop, (hitAreaBottom - hitAreaTop));
+    // console.log('for arguments: ', hitAreaTop, (hitAreaBottom - hitAreaTop));
     for (let o = hitAreaTop; o <= hitAreaBottom; o++){
         okArray.push(o);
     }
-    console.log(okArray);
-    let middleArrayIndex = okArray.length / 2;
-    console.log('middleArrayIndex: ',middleArrayIndex)
-    for (let n = hitAreaTop;n < middleArrayIndex + 10 ;n++){
+    // console.log('ok:', okArray);
+    let middleArrayIndex = Math.floor(okArray.length / 2) + 20;
+    // console.log('middleArrayIndex: ',middleArrayIndex)
+    for (let n = okArray[middleArrayIndex] - Math.floor(okArray.length / 6) ;n < okArray[middleArrayIndex] + Math.floor(okArray.length / 6) ;n++){
         niceArray.push(n);
+    }
+    // console.log('niceArray: ',niceArray);
+    for (let g = okArray[middleArrayIndex] - Math.floor(okArray.length / 16);g < okArray[middleArrayIndex] + Math.floor(okArray.length / 16);g++){
+        greatArray.push(g);
+    }
+    // console.log('tileHitbox: ', tileHitbox);
+    // console.log('hitArea', hitArea);
+    // console.log('greatArray: ', greatArray);
+    if (greatArray.includes(hitTiming)){
+        console.log('great');
+    } else if (niceArray.includes(hitTiming)){
+        console.log('nice');
+    } else if (okArray.includes(hitTiming)){
+        console.log('ok');
     }
     // console.log('bottomY: ', bottomHitArea);
     // if (tileHitbox.ypos + tileHitbox.height){
 
     // }
-    console.log(hitArea.ypos, tileHitbox.ypos);
+    // console.log(hitArea.ypos, tileHitbox.ypos);
 }
 
 // function newPos(){
