@@ -1,20 +1,24 @@
 function inputHandler(){
-    document.body.addEventListener('keydown', (event) => {
+    document.body.addEventListener('keypress', (event) => {
         // console.log(event);
         keyPressed = event.code;
         // console.log(keyPressed)
         switch (keyPressed) {
-            case 'KeyW':
-                console.log(keyPressed,'up');
+            case 'KeyF':
+                console.log(keyPressed,'1');
+                detectHit(hitAreaFirst, tileFirst);
                 break;
-            case 'KeyS':
-                console.log(keyPressed, 'down');
+            case 'KeyG':
+                console.log(keyPressed, '2');
+                detectHit(hitAreaSecond, tileSecond);
                 break;
-            case 'KeyD':
-                console.log(keyPressed, 'right');
+            case 'KeyH':
+                console.log(keyPressed, '3');
+                detectHit(hitAreaThird, tileThird);
                 break;
-            case 'KeyA':
-                console.log(keyPressed, 'left');
+            case 'KeyJ':
+                console.log(keyPressed, '4');
+                detectHit(hitAreaFourth, tileFourth);
                 break;
             default:
                 // console.log(keyPressed)
