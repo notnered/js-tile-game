@@ -113,13 +113,23 @@ let testArray = [tileFirst, tileSecond, tileThird, tileFourth, tileX5, tileX6, t
 console.log(tileFirst instanceof Tile);
 
 function newDetect(array, hitArea){
+    let hitConnected = false;
+    let tileHitbox;
+    let hitTiming;
     for (let i = 0; i < array.length; i++){
         if (hitArea.ypos <= array[i].ypos + array[i].height && hitArea.xpos === array[i].xpos && array[i].status === 1){
-            let tileHitbox = array[i];
-            let hitTiming = Math.floor((tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height)) / 2);
-            AUDIO_POP.play();
-            scoreCounter(hitArea, tileHitbox, hitTiming);
+            hitConnected = true;
+            tileHitbox = array[i];
+            hitTiming = Math.floor((tileHitbox.ypos + (tileHitbox.ypos + tileHitbox.height)) / 2);
+            // console.log(tileHitbox, hitTiming);
         }
+    }
+    // console.log(tileHitbox, hitTiming);
+    if (hitConnected === true){
+        AUDIO_POP.play();
+        scoreCounter(hitArea, tileHitbox, hitTiming);
+    } else {
+        failedHit();
     }
 }
 
