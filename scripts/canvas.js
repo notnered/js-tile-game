@@ -1,5 +1,6 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
+const btn = document.querySelector('#btn');
 
 // console.log(ctx);
 
@@ -113,7 +114,7 @@ let tileX8 = new Tile((canvas.width / 2) + LINE_FOUR, -500, TILE_WIDTH, TILE_HEI
 
 let testArray = [tileFirst, tileSecond, tileThird, tileFourth, tileX5, tileX6, tileX7, tileX8];
 
-console.log(tileFirst instanceof Tile);
+// console.log(tileFirst instanceof Tile);
 
 function newDetect(array, hitArea){
     let hitConnected = false;
@@ -129,6 +130,8 @@ function newDetect(array, hitArea){
     }
     // console.log(tileHitbox, hitTiming);
     if (hitConnected === true){
+        AUDIO_POP.load();
+        AUDIO_POP.volume = 0.5;
         AUDIO_POP.play();
         tileHitbox.disappear(ctx);
         console.log(tileHitbox.status);
@@ -155,7 +158,6 @@ function clear(){
 // }
 
 let tileArray = [];
-
 
 function succesfullHit(points){
     score += (points * total_combo);
@@ -200,12 +202,12 @@ function scoreCounter(hitArea, tileHitbox, hitTiming){
 
 function drawScore(score){
     // console.log(ctx);
-    ctx.font = "48px serif";
+    ctx.font = "48px roboto";
     ctx.fillText(`${score}pts`, canvas.width - 180, 50);
 }
 
 function drawCombo(combo){
-    ctx.font = "48px serif";
+    ctx.font = "48px roboto";
     ctx.fillText(`${combo}x`, 20, canvas.height - 25);
 }
 
@@ -213,6 +215,17 @@ function drawCombo(combo){
 //     tileFirst.xpos += 1;
 //     tileFirst.ypos += 1;
 // }
+
+function playSong(){
+    const SONG = new Audio('../sounds/songMain.m4a');
+    SONG.load();
+    SONG.volume = 0.25;
+    SONG.play();
+}
+
+// document.addEventListener('load', () => {
+//     playSong();
+// })
 
 function update(){
     clear();
@@ -267,6 +280,10 @@ function update(){
     requestAnimationFrame(update);
 }
 
-update();
+btn.addEventListener('click', () => {
+    playSong();
+    update();
+})
 
+// update();
 

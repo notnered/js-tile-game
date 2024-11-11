@@ -11,8 +11,8 @@
 // }
 
 
-function detectHitNew(lineArray){
-    for (let i = 0; i < lineArray.length; i++){
-        console.log(lineArray[i].ypos);
-    }
-};
+// function detectHitNew(lineArray){
+//     for (let i = 0; i < lineArray.length; i++){
+//         console.log(lineArray[i].ypos);
+//     }
+// };
