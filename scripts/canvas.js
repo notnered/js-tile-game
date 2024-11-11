@@ -60,9 +60,10 @@ class Tile {
         }
     }
 
-    disappear(){
+    disappear(context){
         context.clearRect(this.xpos, this.ypos, this.width, this.height);
-        this.status === 0;
+        this.status = 0;
+        // console.log('disappeared');
     }
 }
 
@@ -88,7 +89,7 @@ const LINE_TWO = 45;
 const LINE_THREE = 10;
 const LINE_FOUR = 65;
 
-const MOVE_SPEED = 1;
+const MOVE_SPEED = 2;
 
 const AUDIO_POP = new Audio('../sounds/drum-hitclap.ogg');
 
@@ -127,6 +128,8 @@ function newDetect(array, hitArea){
     // console.log(tileHitbox, hitTiming);
     if (hitConnected === true){
         AUDIO_POP.play();
+        tileHitbox.disappear(ctx);
+        console.log(tileHitbox.status);
         scoreCounter(hitArea, tileHitbox, hitTiming);
     } else {
         failedHit();
