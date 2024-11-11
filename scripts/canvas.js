@@ -9,7 +9,7 @@ let window_height = window.innerHeight;
 let window_width = window.innerWidth;
 
 // CANVAS HEIGHT/WIDTH
-canvas.height = 600;
+canvas.height = 720;
 canvas.width = window_width / 2;
 
 // RECTANGLE
@@ -27,9 +27,6 @@ canvas.width = window_width / 2;
 // ctx.fillRect(300, 0, 50, 100);
 // ctx.fillRect(400, 0, 50, 100);
 // ctx.fillRect(500, 0, 50, 100);
-
-// TODO: Реализовать функцию перемещения для пробы
-// Затем перейти к реализации ритм игры
 
 class Tile {
     constructor(xpos, ypos, width, height, speed){
@@ -112,7 +109,7 @@ let tileX6 = new Tile((canvas.width / 2) - LINE_ONE, -450, TILE_WIDTH, TILE_HEIG
 let tileX7 = new Tile((canvas.width / 2) + LINE_THREE, -400, TILE_WIDTH, TILE_HEIGHT);
 let tileX8 = new Tile((canvas.width / 2) + LINE_FOUR, -500, TILE_WIDTH, TILE_HEIGHT);
 
-let testArray = [tileFirst, tileSecond, tileThird, tileFourth, tileX5, tileX6, tileX7, tileX8];
+let tileArray = [tileFirst, tileSecond, tileThird, tileFourth, tileX5, tileX6, tileX7, tileX8];
 
 // console.log(tileFirst instanceof Tile);
 
@@ -156,8 +153,6 @@ function clear(){
 //         failedHit()
 //     }
 // }
-
-let tileArray = [];
 
 function succesfullHit(points){
     score += (points * total_combo);
@@ -227,10 +222,12 @@ function playSong(){
 //     playSong();
 // })
 
+let hitArray = [hitAreaFirst, hitAreaSecond, hitAreaThird, hitAreaFourth];
+
 function update(){
     clear();
 
-    testArray.forEach((obj) => {
+    tileArray.forEach((obj) => {
         obj.draw(ctx);
     })
 
@@ -243,7 +240,7 @@ function update(){
     // tileX7.draw(ctx);
     // tileX8.draw(ctx);
 
-    testArray.forEach((obj) => {
+    tileArray.forEach((obj) => {
         obj.move(MOVE_SPEED);
     });
 
@@ -256,10 +253,14 @@ function update(){
     // tileX7.move(1);
     // tileX8.move(1);
 
-    hitAreaFirst.appear(ctx);
-    hitAreaSecond.appear(ctx);
-    hitAreaThird.appear(ctx);
-    hitAreaFourth.appear(ctx);
+    // hitAreaFirst.appear(ctx);
+    // hitAreaSecond.appear(ctx);
+    // hitAreaThird.appear(ctx);
+    // hitAreaFourth.appear(ctx);
+
+    hitArray.forEach((obj) => {
+        obj.appear(ctx);
+    })
 
     // detectHit(hitAreaFirst, tileFirst);
     // detectHit(hitAreaSecond, tileSecond);
@@ -283,7 +284,7 @@ function update(){
 btn.addEventListener('click', () => {
     playSong();
     update();
-})
+});
 
 // update();
 
