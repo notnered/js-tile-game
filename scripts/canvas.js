@@ -8,7 +8,7 @@ let window_height = window.innerHeight;
 let window_width = window.innerWidth;
 
 // CANVAS HEIGHT/WIDTH
-canvas.height = window_height - 64;
+canvas.height = 600;
 canvas.width = window_width / 2;
 
 // RECTANGLE
@@ -93,11 +93,13 @@ const MOVE_SPEED = 2;
 
 const AUDIO_POP = new Audio('../sounds/drum-hitclap.ogg');
 
+let score = 0;
+let total_combo = 1;
+
 let hitAreaFirst = new HitArea((canvas.width / 2) - LINE_ONE, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
 let hitAreaSecond = new HitArea((canvas.width / 2) - LINE_TWO, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
 let hitAreaThird = new HitArea((canvas.width / 2) + LINE_THREE, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
 let hitAreaFourth = new HitArea((canvas.width / 2) + LINE_FOUR, canvas.height - 80, TILE_WIDTH, TILE_HEIGHT);
-
 
 let tileFirst = new Tile((canvas.width / 2) - LINE_ONE, -100, TILE_WIDTH, TILE_HEIGHT);
 let tileSecond = new Tile((canvas.width / 2) - LINE_TWO, -0, TILE_WIDTH, TILE_HEIGHT);
@@ -196,6 +198,17 @@ function scoreCounter(hitArea, tileHitbox, hitTiming){
     }
 }
 
+function drawScore(score){
+    // console.log(ctx);
+    ctx.font = "48px serif";
+    ctx.fillText(`${score}pts`, canvas.width - 180, 50);
+}
+
+function drawCombo(combo){
+    ctx.font = "48px serif";
+    ctx.fillText(`${combo}x`, 20, canvas.height - 25);
+}
+
 // function newPos(){
 //     tileFirst.xpos += 1;
 //     tileFirst.ypos += 1;
@@ -247,6 +260,9 @@ function update(){
     //         return;
     //     }
     // }
+
+    drawScore(score);
+    drawCombo(total_combo);
 
     requestAnimationFrame(update);
 }
