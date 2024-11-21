@@ -218,8 +218,17 @@ function update(){
     requestAnimationFrame(update);
 }
 
-btn.addEventListener('click', () => {
+let isStarted = false;
+
+function startGame(){
+    if (isStarted) {
+        return;
+    }
     playSong();
     update();
-});
+    return isStarted = true;
+}
 
+btn.addEventListener('click', startGame);
+
+export { newDetect, tileArray, hitAreaFirst, hitAreaSecond, hitAreaThird, hitAreaFourth, startGame};
