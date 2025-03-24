@@ -1,5 +1,4 @@
-here i'm doing simple 4 note rhythm game, maybe will update it in future 
+this is my pet-project to improve my JS and canvas skills at once
 <br />
 controls: F G H J
 <br />
-goals: improve my canvas and js skills 🥑
